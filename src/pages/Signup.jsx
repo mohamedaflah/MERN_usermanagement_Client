@@ -1,9 +1,24 @@
 
+import { useEffect } from "react";
 import SignupControlls from "../components/SignupControlls";
-
+// import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../constants/constants";
+// import backgroudAvatar from "../assets/9.svg"
 function Signup() {
+  const navigate=useNavigate()
+  // const state=useSelector(state=>state.userAuth)
+  useEffect(()=>{
+    axiosInstance.get('/checkuserauth').then(res=>{
+      if(res.data.status){
+        
+        navigate('/')
+      }
+    })
+  },[])
   return (
-    <main className="flex items-center justify-center w-full h-screen login_page">
+    <main className="flex items-center justify-center gap-4 w-full h-[92vh] login_page backdrop-filter ">
+
       <div
         className="lg:w-[30%] md:w-[50%]  w-[90%]  h-[500px]  rounded-sm flex flex-col"
         style={{
@@ -11,8 +26,7 @@ function Signup() {
           transition: " all 0.3s cubic-bezier(.25,.8,.25,1)",
         }}
       >
-        <div className="flex justify-start px-4 mt-2 header">
-        </div>
+        
         <SignupControlls/>
       </div>
     </main>

@@ -1,6 +1,19 @@
 
+import { useEffect } from "react";
 import LoginControlls from "../components/LoginControls";
+// import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../constants/constants";
 function Login() {
+  // const state=useSelector(state=>state.userAuth)
+  const navigate=useNavigate()
+  useEffect(()=>{
+    axiosInstance.get('/checkuserauth').then(res=>{
+      if(res.data.status){
+        navigate('/')
+      }
+    })
+  },[])
   return (
     <main className="flex items-center justify-center w-full h-screen login_page">
       <div

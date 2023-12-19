@@ -4,9 +4,52 @@ import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { useState } from "react";
 import { MdLockOpen } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { axiosInstance } from "../constants/constants";
 function LoginControlls() {
+  const navigate=useNavigate()
   const [showpass, setShowpass] = useState(false);
+  const [email,setEmail]=useState('')
+  const [password,setPassword]=useState('')
+  const loginValidation=()=>{
+    let validate=true
+    if(!email){
+        validate=false
+    }
+    if(!password){
+        validate=false
+    }
+    return validate
+  }
+  const handleLoginSubmition=()=>{
+    console.log('top',loginValidation())
+    if(loginValidation()){
+      console.log('asfdasfd')
+      // alert('all is correct')
+      axiosInstance.post('/login',{
+        email,password
+      }).then(response=>{
+        if(response.data.status){
+          navigate('/')
+        }
+        if(response.data.err){
+          alert(response.data.err)
+          console.log(response.data.err);
+        }
+      })
+    }else{
+      console.log('asfdasfd')
+      // alert('wrong')
+    }
+  }
+  const handleEmailSetting=(e)=>{
+    // if(e.target.value!==''){
+      setEmail(e.target.value)
+    // }
+  }
+  const handlePasswordSetting=(e)=>{
+    setPassword(e.target.value)
+  }
   return (
     <>
       <div className="px-5 mt-2">
@@ -20,6 +63,8 @@ function LoginControlls() {
               type="email"
               name=""
               id=""
+              value={email}
+              onChange={handleEmailSetting}
               className="w-full p-1 text-sm border-none outline-none"
               placeholder="Email Address"
             />
@@ -39,7 +84,9 @@ function LoginControlls() {
             <input
               type={showpass ? "text" : "password"}
               name=""
+              value={password}
               id=""
+              onChange={handlePasswordSetting}
               className="w-full p-1 text-sm border-none outline-none"
               placeholder="password"
             />
@@ -64,11 +111,12 @@ function LoginControlls() {
                 "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
               transition: " all 0.3s cubic-bezier(.25,.8,.25,1)",
             }}
+            onClick={handleLoginSubmition}
           >
             submit
           </button>
           <div className="flex justify-end p-1">
-            <Link className="underline cursor-pointer" to={'/signup'}>signup</Link>
+            <Link className="underline cursor-pointer" to={'/signup'} replace={true}>signup</Link>
           </div>
         </div>
       </div>
