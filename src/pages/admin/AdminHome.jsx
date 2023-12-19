@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { axiosInstance } from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setAdmindata } from "../../redux/actions/adminAuth";
-import Table from "../../components/admin/Table";
+// import Table from "../../components/admin/Table";
 import demoImage from "../../assets/download.png";
 import { IoClose } from "react-icons/io5";
+import { setAllUsers } from "../../redux/actions/getUser";
+const Table=lazy(()=>import('../../components/admin/Table'))
 function AdminHome() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -14,7 +16,7 @@ function AdminHome() {
   const [createEmail,setCrateEmail]=useState("")
   const [createUsername,setCrateUsername]=useState("")
   const [createPassword,setCreatePassword]=useState("")
-
+  const[search,setSearch]=useState("")
   useEffect(() => {
     axiosInstance.get("/admin/checkadminauth").then((response) => {
       if (!response.data.status) {
@@ -23,11 +25,32 @@ function AdminHome() {
       }
     });
   }, []);
+  const handleCreateUserForm=(e)=>{
+    e.preventDefault()
+    const formData=new FormData()
+    formData.append('email',createEmail)
+    formData.append('username',createUsername)
+    formData.append('password',createPassword)
+    formData.append('profile',createprofile)
+    axiosInstance.post('/admin/createuser',formData).then((response)=>{
+        if(response.data.status){
+            dispatch(setAllUsers())
+            setModal(false)
+            setCrateEmail("")
+            setCrateUsername("")
+            setCreatePassword("")
+            setCreateProfile()
+        }else{
+            alert(response.data.err)
+        }
+    })
+  }
   return (
     <>
+    
       {modal && (
         <div className="absolute w-[50%] h-[50%]  top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10 rounded-sm">
-          <form className="max-w-sm mx-auto bg-slate-500 p-4 rounded-lg relative">
+          <form className="max-w-sm mx-auto bg-slate-500 p-4 rounded-lg relative" onSubmit={handleCreateUserForm}>
             <IoClose className="absolute right-5 text-2xl cursor-pointer" onClick={()=>setModal(false)} />
             <div className="mb-5">
               <h1 className="text-white text-center text-2xl font-semibold">
@@ -56,7 +79,6 @@ function AdminHome() {
                 onChange={(e)=>setCreateProfile(e.target.files[0])}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@flowbite.com"
-                required
               />
             </div>
 
@@ -157,12 +179,15 @@ function AdminHome() {
               <input
                 type="text"
                 id="table-search"
+                onChange={(e)=>setSearch(e.target.value)}
                 className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search for items"
+                placeholder="Search username"
               />
             </div>
           </div>
-          <Table />
+          <Suspense fallback={<h1>loading...</h1>}>
+          <Table search={search} />
+          </Suspense>
         </div>
       </div>
     </>

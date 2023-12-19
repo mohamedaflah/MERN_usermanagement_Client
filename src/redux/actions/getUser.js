@@ -17,6 +17,8 @@ export const setAllUsers=()=>{
               payload:response.data.usersList
           })
           }
+        }).catch(err=>{
+          console.log(err,' heio');
         })
       } catch (error) {
         console.log(error.message);
