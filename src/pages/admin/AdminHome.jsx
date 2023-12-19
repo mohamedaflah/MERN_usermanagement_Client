@@ -20,8 +20,9 @@ function AdminHome() {
   useEffect(() => {
     axiosInstance.get("/admin/checkadminauth").then((response) => {
       if (!response.data.status) {
-        dispatch(setAdmindata(response.data.adminData));
         navigate("/admin/auth");
+      }else{
+        dispatch(setAdmindata(response.data.adminData));
       }
     });
   }, []);

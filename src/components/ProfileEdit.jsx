@@ -5,7 +5,7 @@ import { Modal } from "react-responsive-modal";
 import ProfileImage from "../assets/download.png";
 import { axiosInstance } from "../constants/constants";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSignupData } from "../redux/actions/signupActions";
 const ProfileEdit = () => {
   const [open, setOpen] = useState(false);
@@ -15,12 +15,13 @@ const ProfileEdit = () => {
   const onCloseModal = () => setOpen(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [user, setUser] = useState({});
+//   const [user, setUser] = useState({});
   const [showprofile, showSetProfile] = useState("");
   const [profile, setProfile] = useState();
   const usernameRef = useRef();
   const dispatch=useDispatch()
   const emailRef = useRef();
+  const state=useSelector(state=>state.signupdata)
   const validateForm = () => {
     let validate = true;
     if (!username) {
@@ -56,7 +57,7 @@ const ProfileEdit = () => {
             if(response.data.status){
                 dispatch(setSignupData(response.data.userData))
                 setOpen(false)
-                location.reload()
+                // location.reload()
                 navigate(`/profile/${params.id}`)
             }else{
                 alert(response.data.err)
@@ -65,17 +66,25 @@ const ProfileEdit = () => {
     }
   };
   useEffect(() => {
-    // alert("profile");
-    axiosInstance.get(`/getuserprofile/${params.id}`).then((response) => {
-      if (response.data.status) {
-        setUser({ ...user, ...response.data.userData });
-        setUsername(response.data.userData.username);
-        setEmail(response.data.userData.email);
-        showSetProfile(response.data.userData.profileImage);
-      }
-      console.log(user, " user");
-    });
-  }, []);
+    // alert(JSON.stringify(state.signupData));
+    // alert(state)
+    console.log(state.signupData,'in profile');
+    // axiosInstance.get(`/getuserprofile/${params.id}`).then((response) => {
+    //   if (response.data.status) {
+    //     setUser({ ...user, ...response.data.userData });
+    //     setUsername(response.data.userData.username);
+    //     setEmail(response.data.userData.email);
+    //     showSetProfile(response.data.userData.profileImage);
+    //   }
+    //   console.log(user, " user");
+    // });
+    setUsername(state.signupData.username);
+    setEmail(state.signupData.email);
+    showSetProfile(state.signupData.profileImage);
+
+    
+
+  }, [state.signupData]);
   return (
     <div>
       <button onClick={onOpenModal} className="w-full">

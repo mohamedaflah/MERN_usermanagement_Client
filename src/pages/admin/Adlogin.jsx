@@ -3,12 +3,17 @@ import { useEffect } from "react";
 import AdLoginControl from "../../components/admin/AdlogControl";
 import { axiosInstance } from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setAdmindata } from "../../redux/actions/adminAuth";
 function AdLogin() {
   // const state=useSelector(state=>state.userAuth)
   const navigate=useNavigate()
+  const dispatch=useDispatch()
   useEffect(()=>{
     axiosInstance.get('/admin/checkadminauth').then(resposne=>{
         if(resposne.data.status){
+            console.log(resposne.data.adminData,'admin data');
+            dispatch(setAdmindata(resposne.data.adminData))
             navigate('/admin/home')
         }
     })

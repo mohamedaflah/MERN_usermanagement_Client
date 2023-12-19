@@ -6,21 +6,24 @@ import { Link, useParams } from "react-router-dom";
 import { axiosInstance } from "../constants/constants";
 import ProfileImage from "../assets/download.png";
 import ProfileEdit from "./ProfileEdit";
+import { useSelector } from "react-redux";
 function ProfileControls() {
   // const [showpass,setShowpass]=useState(false)
   const [user, setUser] = useState({});
   const [showProfile, setShowProfile] = useState();
+  const state=useSelector(state=>state.signupdata)
   const params = useParams();
   console.log(params, " par");
   useEffect(() => {
     setShowProfile(ProfileImage);
-    axiosInstance.get(`/getuserprofile/${params.id}`).then((response) => {
-      if (response.data.status) {
-        setUser({ ...user, ...response.data.userData });
-      }
-      console.log(user, " user");
-    });
-  }, []);
+    // axiosInstance.get(`/getuserprofile/${params.id}`).then((response) => {
+    //   if (response.data.status) {
+    //     setUser({ ...user, ...response.data.userData });
+    //   }
+    //   console.log(user, " user");
+    // });
+    setUser({...user,...state.signupData})
+  }, [state.signupData]);
   return (
     <>
       <div className="flex justify-center ">

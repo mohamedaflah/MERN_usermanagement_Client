@@ -3,13 +3,20 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import demmyImage from '../assets/download.png'
 import { axiosInstance } from "../constants/constants";
+import { useEffect, useState } from "react";
 function Navbar() {
   const navigate = useNavigate();
+  const all=useSelector((state)=>state)
   const state = useSelector((state) => state.userAuth);
   const userData=useSelector((state)=>state.signupdata).signupData
+  const [auth,setisAuth]=useState(false)
   console.log(state, "state ");
+  console.log(all, "all state ");
   console.log(JSON.stringify(userData), "userdata ");
   console.log(userData.username, "userdataname ");
+  useEffect(()=>{
+    // alert('calling nav useEffect')
+  },[navigate,location])
   return (
     <header className="flex items-center justify-center w-full h-16 border-b border-gray-500">
       <div className="lg:w-[75%] md:w-[85%] w-[90%]  flex justify-between">

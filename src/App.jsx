@@ -3,16 +3,19 @@ import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import {checkUserAuth} from './redux/actions/authActions'
-import {  Route, Routes } from "react-router-dom";
+import {  Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import { useDispatch } from "react-redux";
 // import Signup2 from "./pages/Signup2";
 import Profile from "./pages/Profile";
 import AdLogin from "./pages/admin/Adlogin";
 import AdminHome from "./pages/admin/AdminHome";
+import AdminNav from "./components/admin/AdminNav";
 // import { setSignupData } from "./redux/actions/signupActions";
 function App() {
   const dispatch=useDispatch()
+  const location=useLocation()
+  const isAdminRoute = location.pathname.startsWith("/admin");
   useEffect(()=>{
     console.log('in app.jsx');
     dispatch(checkUserAuth())
@@ -21,7 +24,8 @@ function App() {
     
     <div className="">
       {/* //bg-gray-900 */}
-      <Navbar />
+      {!isAdminRoute ? <Navbar />:<AdminNav/>}
+      
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/signup" element={<Signup />}/>
