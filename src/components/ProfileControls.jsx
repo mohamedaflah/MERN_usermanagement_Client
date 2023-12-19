@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { AiOutlineUpload } from "react-icons/ai";
-import { FaRegCircleUser, FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
-import { MdLockOpen, MdLockOutline, MdOutlineEmail } from "react-icons/md";
-import { Link, useParams } from "react-router-dom";
-import { axiosInstance } from "../constants/constants";
+import { FaRegCircleUser/*, FaRegEye, FaRegEyeSlash*/ } from "react-icons/fa6";
+import { /*MdLockOpen, MdLockOutline,*/ MdOutlineEmail } from "react-icons/md";
+import { /*Link*/ useParams } from "react-router-dom";
+// import { axiosInstance } from "../constants/constants";
 import ProfileImage from "../assets/download.png";
 import ProfileEdit from "./ProfileEdit";
 import { useSelector } from "react-redux";

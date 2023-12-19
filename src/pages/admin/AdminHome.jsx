@@ -7,52 +7,58 @@ import { setAdmindata } from "../../redux/actions/adminAuth";
 import demoImage from "../../assets/download.png";
 import { IoClose } from "react-icons/io5";
 import { setAllUsers } from "../../redux/actions/getUser";
-const Table=lazy(()=>import('../../components/admin/Table'))
+import Loader from "../../components/admin/Loader";
+const Table = lazy(() => import("../../components/admin/Table"));
 function AdminHome() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
-  const [createprofile,setCreateProfile]=useState()
-  const [createEmail,setCrateEmail]=useState("")
-  const [createUsername,setCrateUsername]=useState("")
-  const [createPassword,setCreatePassword]=useState("")
-  const[search,setSearch]=useState("")
+  const [createprofile, setCreateProfile] = useState();
+  const [createEmail, setCrateEmail] = useState("");
+  const [createUsername, setCrateUsername] = useState("");
+  const [createPassword, setCreatePassword] = useState("");
+  const [search, setSearch] = useState("");
   useEffect(() => {
     axiosInstance.get("/admin/checkadminauth").then((response) => {
       if (!response.data.status) {
         navigate("/admin/auth");
-      }else{
+      } else {
         dispatch(setAdmindata(response.data.adminData));
       }
     });
   }, []);
-  const handleCreateUserForm=(e)=>{
-    e.preventDefault()
-    const formData=new FormData()
-    formData.append('email',createEmail)
-    formData.append('username',createUsername)
-    formData.append('password',createPassword)
-    formData.append('profile',createprofile)
-    axiosInstance.post('/admin/createuser',formData).then((response)=>{
-        if(response.data.status){
-            dispatch(setAllUsers())
-            setModal(false)
-            setCrateEmail("")
-            setCrateUsername("")
-            setCreatePassword("")
-            setCreateProfile()
-        }else{
-            alert(response.data.err)
-        }
-    })
-  }
+  const handleCreateUserForm = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("email", createEmail);
+    formData.append("username", createUsername);
+    formData.append("password", createPassword);
+    formData.append("profile", createprofile);
+    axiosInstance.post("/admin/createuser", formData).then((response) => {
+      if (response.data.status) {
+        dispatch(setAllUsers());
+        setModal(false);
+        setCrateEmail("");
+        setCrateUsername("");
+        setCreatePassword("");
+        setCreateProfile();
+      } else {
+        alert(response.data.err);
+      }
+    });
+  };
   return (
     <>
-    
       {modal && (
         <div className="absolute w-[50%] h-[50%]  top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10 rounded-sm">
-          <form className="max-w-sm mx-auto bg-slate-500 p-4 rounded-lg relative" onSubmit={handleCreateUserForm}>
-            <IoClose className="absolute right-5 text-2xl cursor-pointer" onClick={()=>setModal(false)} />
+          <form
+            className="max-w-sm mx-auto bg-slate-500 p-4 rounded-lg relative"
+            onSubmit={handleCreateUserForm}
+          >
+            <IoClose
+              className="absolute right-5 text-2xl cursor-pointer"
+              onClick={() => setModal(false)}
+            />
             <div className="mb-5">
               <h1 className="text-white text-center text-2xl font-semibold">
                 Create user
@@ -62,7 +68,11 @@ function AdminHome() {
               <div className="w-full flex justify-center">
                 <div className="w-20 h-20 bg-black rounded-full overflow-hidden">
                   <img
-                    src={createprofile?URL.createObjectURL(createprofile):demoImage}
+                    src={
+                      createprofile
+                        ? URL.createObjectURL(createprofile)
+                        : demoImage
+                    }
                     alt=""
                     className="rounded-full h-full w-full"
                   />
@@ -77,7 +87,7 @@ function AdminHome() {
               <input
                 type="file"
                 id="email"
-                onChange={(e)=>setCreateProfile(e.target.files[0])}
+                onChange={(e) => setCreateProfile(e.target.files[0])}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@flowbite.com"
               />
@@ -93,7 +103,7 @@ function AdminHome() {
               <input
                 type="text"
                 id="username"
-                onChange={(e)=>setCrateUsername(e.target.value)}
+                onChange={(e) => setCrateUsername(e.target.value)}
                 value={createUsername}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="aflu.."
@@ -110,7 +120,7 @@ function AdminHome() {
               <input
                 type="email"
                 id="email"
-                onChange={(e)=>setCrateEmail(e.target.value)}
+                onChange={(e) => setCrateEmail(e.target.value)}
                 value={createEmail}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@flowbite.com"
@@ -128,7 +138,7 @@ function AdminHome() {
                 type="password"
                 id="password"
                 value={createPassword}
-                onChange={(e)=>setCreatePassword(e.target.value)}
+                onChange={(e) => setCreatePassword(e.target.value)}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 required
               />
@@ -151,7 +161,7 @@ function AdminHome() {
               <button
                 className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
                 type="button"
-                onClick={()=>setModal(true)}
+                onClick={() => setModal(true)}
               >
                 Crate user
               </button>
@@ -180,14 +190,14 @@ function AdminHome() {
               <input
                 type="text"
                 id="table-search"
-                onChange={(e)=>setSearch(e.target.value)}
+                onChange={(e) => setSearch(e.target.value)}
                 className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Search username"
               />
             </div>
           </div>
-          <Suspense fallback={<h1>loading...</h1>}>
-          <Table search={search} />
+          <Suspense fallback={<Loader />}>
+            <Table search={search} />
           </Suspense>
         </div>
       </div>
