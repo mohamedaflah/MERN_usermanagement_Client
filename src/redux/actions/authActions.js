@@ -18,7 +18,6 @@ const checkUserAuthSuccess = () => {
       try {
         axiosInstance.get('/checkuserauth').then((response)=>{
           if(response.data.status){
-            alert('ds')
             dispatch(checkUserAuthSuccess())
             dispatch(setSignupData(response.data.userData))
           }else{

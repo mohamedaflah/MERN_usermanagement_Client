@@ -6,8 +6,10 @@ import {checkUserAuth} from './redux/actions/authActions'
 import {  Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import { useDispatch } from "react-redux";
-import Signup2 from "./pages/Signup2";
+// import Signup2 from "./pages/Signup2";
 import Profile from "./pages/Profile";
+import AdLogin from "./pages/admin/Adlogin";
+import AdminHome from "./pages/admin/AdminHome";
 // import { setSignupData } from "./redux/actions/signupActions";
 function App() {
   const dispatch=useDispatch()
@@ -25,6 +27,8 @@ function App() {
           <Route path="/signup" element={<Signup />}/>
           <Route path="/login" element={<Login/>} />
           <Route path="/profile/:id" element={<Profile/>}/>
+          <Route path="/admin/auth" element={<AdLogin/>} />
+          <Route path="/admin/home" element={<AdminHome/>} />
         </Routes>
     </div>
     

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { MdDeleteOutline } from "react-icons/md";
+// import { MdDeleteOutline } from "react-icons/md";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import ProfileImage from "../assets/download.png";
@@ -52,9 +52,11 @@ const ProfileEdit = () => {
       axiosInstance
         .put(`/updateuserprofile/${params.id}`,formData)
         .then((response) => {
-            alert(JSON.stringify(response.data))
+            // alert(JSON.stringify(response.data))
             if(response.data.status){
                 dispatch(setSignupData(response.data.userData))
+                setOpen(false)
+                location.reload()
                 navigate(`/profile/${params.id}`)
             }else{
                 alert(response.data.err)
@@ -63,13 +65,13 @@ const ProfileEdit = () => {
     }
   };
   useEffect(() => {
-    alert("profile");
+    // alert("profile");
     axiosInstance.get(`/getuserprofile/${params.id}`).then((response) => {
       if (response.data.status) {
         setUser({ ...user, ...response.data.userData });
         setUsername(response.data.userData.username);
         setEmail(response.data.userData.email);
-        showSetProfile(response.data.profileImage);
+        showSetProfile(response.data.userData.profileImage);
       }
       console.log(user, " user");
     });
@@ -90,7 +92,6 @@ const ProfileEdit = () => {
                 id="img1"
                 className="hidden"
                 onChange={(e) => {
-                  alert("d", e);
                   console.log("changin___________");
                   console.log(profile, " asdfadslkfsfd");
                   showSetProfile(URL.createObjectURL(e.target.files[0]));
