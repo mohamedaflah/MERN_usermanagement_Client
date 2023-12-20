@@ -1,16 +1,18 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import ReactCrop from "react-image-crop";
 // import demmyImage from "../assets/download.png";
 import "react-image-crop/dist/ReactCrop.css";
 // eslint-disable-next-line react/prop-types
 const ImageCrop = ({image,setImage,offCrop}) => {
-//   const [height, setHeight] = useState("");
-//   const [width, setWidth] = useState("");
   const [crop, setCrop] = useState(null);
   const [completecrop, setCompleteCrop] = useState(null);
   
   const getCroppedImg = (image, crop, fileName) => {
     const canvas = document.createElement("canvas");
+    // eslint-disable-next-line react/prop-types
+    const scaleX=image.naturalWidth/image.width
+    const scaleY=image.naturalHeight/image.height
     
     canvas.width = crop.width;
     canvas.height = crop.height;
@@ -18,10 +20,10 @@ const ImageCrop = ({image,setImage,offCrop}) => {
   
     ctx.drawImage(
       image,
-      crop.x,
-      crop.y,
-      crop.width,
-      crop.height,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
       0,
       0,
       crop.width,
@@ -57,8 +59,6 @@ const ImageCrop = ({image,setImage,offCrop}) => {
     }
   }
   const onImageLoad = (e) => {
-    // setHeight(e?.currentTarget?.height);
-    // setWidth(e?.currentTarget?.width);
     if(completecrop==null){
 
         setCompleteCrop({
@@ -75,22 +75,14 @@ const ImageCrop = ({image,setImage,offCrop}) => {
   return (
     <div>
       <ReactCrop
-        crop={crop}
         onChange={(c) => setCrop(c)}
-        onComplete={(e) => {
-        //   if (e.height == 0 || e.width === 0) {
-        //     setCompleteCrop({
-        //       x: 0,
-        //       y: 0,
-        //       height: height,
-        //       width: width,
-        //       uit: "px",
-        //     });
-        //   } else {
-            setCompleteCrop(e);
-        //   }
-        }}
+        crop={crop}
         
+        onComplete={(e) => {
+
+            setCompleteCrop(e);
+     
+        }}
       >
         <img src={URL.createObjectURL(image)} alt="" className="h-full" onLoad={onImageLoad} />
       </ReactCrop>
