@@ -1,11 +1,12 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import LoginControlls from "../components/LoginControls";
 // import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../constants/constants";
 function Login() {
   // const state=useSelector(state=>state.userAuth)
+  const [isLoading,setisLoading]=useState(true)
   const navigate=useNavigate()
   useEffect(()=>{
     axiosInstance.get('/checkuserauth').then(res=>{
@@ -13,7 +14,15 @@ function Login() {
         navigate('/')
       }
     })
+    setisLoading(false)
   },[])
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
+  }
   return (
     <main className="flex items-center justify-center w-full h-screen login_page">
       <div

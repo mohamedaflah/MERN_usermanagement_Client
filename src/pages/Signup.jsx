@@ -4,6 +4,7 @@ import SignupControlls from "../components/SignupControlls";
 // import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../constants/constants";
+
 // import backgroudAvatar from "../assets/9.svg"
 function Signup() {
   const navigate=useNavigate()
@@ -28,6 +29,8 @@ function Signup() {
       >
         
         <SignupControlls/>
+        <div>
+        </div>
       </div>
     </main>
   );

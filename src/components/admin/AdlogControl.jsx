@@ -4,59 +4,93 @@ import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { useRef, useState } from "react";
 import { MdLockOpen } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { /*Link,*/ useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../constants/constants";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch/*, useSelector*/ } from "react-redux";
 import { setAdmindata } from "../../redux/actions/adminAuth";
+import Swal from "sweetalert2";
 function AdLoginControl() {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [showpass, setShowpass] = useState(false);
-  const [email,setEmail]=useState('')
-  const [password,setPassword]=useState('')
-  const emailRef=useRef()
-  const passworeRef=useRef()
-  const loginValidation=()=>{
-    let validate=true
-    if(!email){
-        validate=false
-        emailRef.current.classList.remove('hidden')
-        setTimeout(()=>{
-            emailRef.current.classList.add('hidden')
-        },3000)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const emailRef = useRef();
+  const submitRef=useRef()
+  const passworeRef = useRef();
+  const loginValidation = () => {
+    let validate = true;
+    if (!email) {
+      validate = false;
+      emailRef.current.classList.remove("hidden");
+      setTimeout(() => {
+        emailRef.current.classList.add("hidden");
+      }, 3000);
     }
-    if(!password){
-        validate=false
-        passworeRef.current.classList.remove('hidden')
-        setTimeout(()=>{
-            passworeRef.current.classList.add('hidden')
-        },3000)
+    if (!password) {
+      validate = false;
+      passworeRef.current.classList.remove("hidden");
+      setTimeout(() => {
+        passworeRef.current.classList.add("hidden");
+      }, 3000);
     }
-    return validate
-}
-  const handleEmailSetting=(e)=>{
+    return validate;
+  };
+  const handleEmailSetting = (e) => {
     // if(e.target.value!==''){
-      setEmail(e.target.value)
+    setEmail(e.target.value);
     // }
-  }
-  const dispatch=useDispatch()
-  const handlePasswordSetting=(e)=>{
-    setPassword(e.target.value)
-  }
-  const handleFormSubmit=()=>{
-    if(loginValidation()){
-        const formData=new FormData()
-        formData.append("email",email)
-        formData.append("password",password)
-        axiosInstance.post('/admin/login',{email,password}).then(response=>{
-            if(response.data.status){
-                dispatch(setAdmindata(response.data.adminData))
-                navigate('/admin/home')
-            }else{
-                alert(response.data.err)
+  };
+  const dispatch = useDispatch();
+  const handlePasswordSetting = (e) => {
+    setPassword(e.target.value);
+  };
+  const handleFormSubmit = () => {
+    if (loginValidation()) {
+      submitRef.current.disabled=true;
+      // submitRef.current.classList.add("bg-red-500");
+      submitRef.current.innerText='Processing...';
+      const formData = new FormData();
+      formData.append("email", email);
+      formData.append("password", password);
+      axiosInstance
+        .post("/admin/login", { email, password })
+        .then((response) => {
+          if (response.data.status) {
+            dispatch(setAdmindata(response.data.adminData));
+            navigate("/admin/home");
+          } else {
+            // alert();
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: response.data.err,
+              footer: '<a href="#">Why do I have this issue?</a>'
+            });
+          }
+        }).catch(err=>{
+          Swal.fire({
+            title: err.message,
+            showClass: {
+              popup: `
+                animate__animated
+                animate__fadeInUp
+                animate__faster
+              `
+            },
+            hideClass: {
+              popup: `
+                animate__animated
+                animate__fadeOutDown
+                animate__faster
+              `
             }
+          });
         })
+        submitRef.current.disabled=false;
+        submitRef.current.textContent='Save'
+        
     }
-  }
+  };
   return (
     <>
       <div className="px-5 mt-2">
@@ -119,10 +153,10 @@ function AdLoginControl() {
               transition: " all 0.3s cubic-bezier(.25,.8,.25,1)",
             }}
             onClick={handleFormSubmit}
+            ref={submitRef}
           >
             submit
           </button>
-
         </div>
       </div>
     </>

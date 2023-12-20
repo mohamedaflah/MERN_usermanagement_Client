@@ -8,32 +8,35 @@ import { MdLockOpen } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineUpload } from "react-icons/ai";
 import ProfileImage from "../assets/download.png";
-import {axiosInstance} from '../constants/constants'
+import { axiosInstance } from "../constants/constants";
 import { useDispatch } from "react-redux";
 import { setSignupData } from "../redux/actions/signupActions";
+import Swal from "sweetalert2";
+import ImageCrop from "./ImageCrop";
 // import { FaRegTrashCan } from "react-icons/fa6";
 function SignupControlls() {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [showpass, setShowpass] = useState(false);
   const [username, setUsername] = useState("");
+  const [crop,setCrop]=useState(false)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [profile,setProfile]=useState()
-  const dispatch=useDispatch()
-  const emailErrRef=useRef()
-  const usernameRef=useRef()
-  const passwordRef=useRef()
+  const [profile, setProfile] = useState();
+  const dispatch = useDispatch();
+  const emailErrRef = useRef();
+  const usernameRef = useRef();
+  const passwordRef = useRef();
+  const submitRef=useRef()
   const handleUsername = (e) => {
-      if ( username.length <= 10) {
-        setUsername(e.target.value);
-      
+    if (username.length <= 10) {
+      setUsername(e.target.value);
     }
   };
   const handleKeyDownforUsername = (e) => {
-    if (e.key === 'Backspace') {
+    if (e.key === "Backspace") {
       // Prevent the default behavior to stop the cursor from moving
       e.preventDefault();
-  
+
       // Remove the last character
       setUsername((prevUsername) => prevUsername.slice(0, -1));
     }
@@ -44,81 +47,109 @@ function SignupControlls() {
   const handlePassword = (e) => {
     setPassword(e.target.value);
   };
-  const handleImage=(e)=>{
-    setProfile(e.target.files[0])
-  }
-  const signupValidation=()=>{
-    let validation=true
-    if(!username){
-      usernameRef.current.classList.remove('hidden')
-      setTimeout(()=>{
-        usernameRef.current.classList.add('hidden')
-      },3000)
-      validation=false
+  const handleImage = (e) => {
+    setProfile(e.target.files[0]);
+    setCrop(true)
+  };
+  const signupValidation = () => {
+    let validation = true;
+    if (!username) {
+      usernameRef.current.classList.remove("hidden");
+      setTimeout(() => {
+        usernameRef.current.classList.add("hidden");
+      }, 3000);
+      validation = false;
     }
-    if(!email){
-      emailErrRef.current.classList.remove('hidden')
-      setTimeout(()=>{
-        emailErrRef.current.classList.add('hidden')
-      },3000)
-      validation=false
+    if (!email) {
+      emailErrRef.current.classList.remove("hidden");
+      setTimeout(() => {
+        emailErrRef.current.classList.add("hidden");
+      }, 3000);
+      validation = false;
     }
-    if(!password){
-      passwordRef.current.classList.remove('hidden')
-      setTimeout(()=>{
-        passwordRef.current.classList.add('hidden')
-      },3000)
-      validation=false
+    if (!password) {
+      passwordRef.current.classList.remove("hidden");
+      setTimeout(() => {
+        passwordRef.current.classList.add("hidden");
+      }, 3000);
+      validation = false;
     }
-    return validation
-  }
-  const handleFormSubmition=()=>{
-    if(signupValidation()){
-      alert('all is correct')
+    return validation;
+  };
+  const handleFormSubmition = () => {
+    if (signupValidation()) {
+      submitRef.current.disabled=true
+      submitRef.current.textContent='Processing..'
+
       // const formData={
       //   username,email,password,profile:URL.createObjectURL(profile)
       // }
-      const formData=new FormData()
-      formData.append('username',username)
-      formData.append("email",email)
-      formData.append("password",password)
-      formData.append('profile',profile)
-      axiosInstance.post('/signup',formData).then((res)=>{
-        if(res.data.status){
-          alert('success')
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("profile", profile);
+      axiosInstance.post("/signup", formData).then((res) => {
+        if (res.data.status) {
           console.log(res.data.userDetails);
-          dispatch(setSignupData(res.data.userDetails))
-          localStorage.setItem("userdata",JSON.stringify(res.data.userDetails))
-          
-          navigate('/',{replace:true})
+          dispatch(setSignupData(res.data.userDetails));
+          localStorage.setItem(
+            "userdata",
+            JSON.stringify(res.data.userDetails)
+          );
+
+          navigate("/", { replace: true });
         }
-        if(res.data.err){
-          alert(res.data.err)
+        if (res.data.err) {
+          alert(res.data.err);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: res.data.err,
+            footer: '<a href="#">Why do I have this issue?</a>'
+          });
         }
-      })
+        submitRef.current.disabled=false
+      submitRef.current.textContent='submit'
+      });
     }
-  }
+  };
   return (
     <>
-      <div className="flex justify-center ">
-        <input type="file" style={{ display: "none" }} id="img" onChange={handleImage} />
+      <div className="flex justify-center relative">
+        {crop&&<div className="absolute w-96 min-h-96 bg-[#cbcbcb] top-9 rounded-md z-20 p-2 border">
+          <div className="w-full h-full">
+            <ImageCrop image={profile} setImage={setProfile} offCrop={setCrop}/>
+          </div>
+        </div>}
+        <input
+          type="file"
+          style={{ display: "none" }}
+          id="img"
+          onChange={handleImage}
+          accept="image/*"
+        />
         <label
           className="p-4 border border-dashed cursor-pointer border-gray-400 my-1 rounded-sm"
           htmlFor="img"
         >
           <div className="flex items-center justify-center overflow-hidden rounded-lg  h-28 w-28">
-            <img src={!profile?ProfileImage:URL.createObjectURL(profile)} alt="" className="h-full w-full" style={{objectFit:"cover"}}  />
+            <img
+              src={!profile ? ProfileImage : URL.createObjectURL(profile)}
+              alt=""
+              className="h-full w-full"
+              style={{ objectFit: "cover" }}
+            />
           </div>
           <div className="flex justify-between mt-1 text-2xl cursor-pointer">
-          <div className="text-[20px] z-10 ">
-          {/* <FaRegTrashCan  /> */}
-          </div>
+            <div className="text-[20px] z-10 ">{/* <FaRegTrashCan  /> */}</div>
             <AiOutlineUpload />
           </div>
         </label>
       </div>
       <div className="px-5">
         <div className="flex flex-col">
+          {/* {JSON.stringify(profile)} */}
           <span className="text-sm">Username</span>
           <div className="flex items-center p-1 border">
             <div className="text-[18px] z-10 ">
@@ -129,7 +160,6 @@ function SignupControlls() {
               onKeyDown={handleKeyDownforUsername}
               name=""
               id=""
-
               className="w-full p-1 text-sm border-none outline-none"
               placeholder="username"
               value={username}
@@ -201,11 +231,16 @@ function SignupControlls() {
               transition: " all 0.3s cubic-bezier(.25,.8,.25,1)",
             }}
             onClick={handleFormSubmition}
+            ref={submitRef}
           >
             submit
           </button>
           <div className="flex justify-end p-1">
-            <Link className="underline cursor-pointer" to={"/login"} replace={true}>
+            <Link
+              className="underline cursor-pointer"
+              to={"/login"}
+              replace={true}
+            >
               Login
             </Link>
           </div>

@@ -9,9 +9,8 @@ import { axiosInstance } from "../../constants/constants";
 import Swal from "sweetalert2";
 import EditModal from "./EditModal";
 // eslint-disable-next-line no-unused-vars
-function Table({ search }) {
+function Table({ search,searchOption }) {
   const users = useSelector((state) => state.usersList.users);
-
   const dispatch = useDispatch();
   const [filteredUsers, setFilteredUsers] = useState(users);
   useEffect(() => {
@@ -20,16 +19,22 @@ function Table({ search }) {
     dispatch(setAllUsers());
   }, [dispatch]);
   useEffect(() => {
-    // alert('wo')
-    const filtered = users.filter((user) =>
-      user.username.toLowerCase().includes(search.toLowerCase())
-    );
+    let filtered;
+    if(search.length>=1){
+      filtered = users.filter((user) =>
+        user[searchOption].toLowerCase().includes(search.toLowerCase())
+      ).reverse()
+    }else{
+      filtered = users.filter((user) =>
+        user[searchOption].toLowerCase().includes(search.toLowerCase())
+      )
+    }
     setFilteredUsers(filtered)
-  }, [search, users]);
-  const delteUser = (userId) => {
+  }, [search, users,searchOption]);
+  const delteUser = (userId,name) => {
     Swal.fire({
       title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      text: `You won't be able to revert ${name}!`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -53,7 +58,7 @@ function Table({ search }) {
   return (
     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
       <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        {/* Table headers */}
+
         <tr>
           <th scope="col" className="px-6 py-3">
             username
@@ -67,7 +72,7 @@ function Table({ search }) {
           <th scope="col" className="px-6 py-3">
             Actions
           </th>
-          {/* Add more table headers as needed */}
+ 
         </tr>
       </thead>
 
@@ -96,7 +101,8 @@ function Table({ search }) {
               <div className="h-11 w-11 bg-black rounded-full overflow-hidden flex items-center justify-center">
                 <img
                   src={user.profileImage ? user.profileImage : demoImage}
-                  className=" object-cover rounded-full"
+                  className=" object-cover rounded-full "
+                  style={{ objectFit: 'cover', objectPosition: 'center' }}
                   alt=""
                 />
               </div>
@@ -109,11 +115,11 @@ function Table({ search }) {
                 <EditModal userData={user} />
                 <AiOutlineDelete
                   className="cursor-pointer"
-                  onClick={() => delteUser(user._id)}
+                  onClick={() => delteUser(user._id,user.username)}
                 />
               </div>
             </th>
-            {/* Add more table data cells as needed */}
+           
           </tr>
         ))}
       </tbody>

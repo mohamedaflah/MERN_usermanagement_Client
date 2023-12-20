@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AiOutlineUpload } from "react-icons/ai";
-import { FaRegCircleUser/*, FaRegEye, FaRegEyeSlash*/ } from "react-icons/fa6";
+import { FaRegCircleUser /*, FaRegEye, FaRegEyeSlash*/ } from "react-icons/fa6";
 import { /*MdLockOpen, MdLockOutline,*/ MdOutlineEmail } from "react-icons/md";
 import { /*Link*/ useParams } from "react-router-dom";
 // import { axiosInstance } from "../constants/constants";
@@ -11,7 +11,7 @@ function ProfileControls() {
   // const [showpass,setShowpass]=useState(false)
   const [user, setUser] = useState({});
   const [showProfile, setShowProfile] = useState();
-  const state=useSelector(state=>state.signupdata)
+  const state = useSelector((state) => state.signupdata);
   const params = useParams();
   console.log(params, " par");
   useEffect(() => {
@@ -22,7 +22,7 @@ function ProfileControls() {
     //   }
     //   console.log(user, " user");
     // });
-    setUser({...user,...state.signupData})
+    setUser({ ...user, ...state.signupData });
   }, [state.signupData]);
   return (
     <>
@@ -93,9 +93,7 @@ function ProfileControls() {
               placeholder="Email Address"
             />
           </div>
-          <span className="text-[13px] text-red-500 hidden">
-            Enter email address
-          </span>
+          <span className="text-[13px] text-red-500 hidden">email address</span>
         </div>
       </div>
       {/* <div className="px-5 mt-2">

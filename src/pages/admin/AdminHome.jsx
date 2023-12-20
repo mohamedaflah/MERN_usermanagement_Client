@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { axiosInstance } from "../../constants/constants";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -12,12 +12,15 @@ const Table = lazy(() => import("../../components/admin/Table"));
 function AdminHome() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const sumbitRef = useRef();
   const [modal, setModal] = useState(false);
   const [createprofile, setCreateProfile] = useState();
   const [createEmail, setCrateEmail] = useState("");
   const [createUsername, setCrateUsername] = useState("");
   const [createPassword, setCreatePassword] = useState("");
   const [search, setSearch] = useState("");
+  const [isLoading, setisLoading] = useState(true);
+  const [searchoption,setSearchOption]=useState("username")
   useEffect(() => {
     axiosInstance.get("/admin/checkadminauth").then((response) => {
       if (!response.data.status) {
@@ -26,9 +29,19 @@ function AdminHome() {
         dispatch(setAdmindata(response.data.adminData));
       }
     });
+    setisLoading(false);
   }, []);
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
+  }
   const handleCreateUserForm = (e) => {
     e.preventDefault();
+    sumbitRef.current.disabled = true;
+    sumbitRef.current.textContent = "Processing..";
     const formData = new FormData();
     formData.append("email", createEmail);
     formData.append("username", createUsername);
@@ -46,6 +59,8 @@ function AdminHome() {
         alert(response.data.err);
       }
     });
+    sumbitRef.current.disabled = false;
+    sumbitRef.current.textContent = "submit";
   };
   return (
     <>
@@ -86,6 +101,7 @@ function AdminHome() {
               </label>
               <input
                 type="file"
+                accept="image/*"
                 id="email"
                 onChange={(e) => setCreateProfile(e.target.files[0])}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -146,6 +162,7 @@ function AdminHome() {
 
             <button
               type="submit"
+              ref={sumbitRef}
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
               Submit
@@ -168,36 +185,46 @@ function AdminHome() {
             </div>
 
             {/* Search Section */}
-            <label htmlFor="table-search" className="sr-only">
+            {/* <label htmlFor="table-search" className="sr-only">
               Search
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
-                <svg
-                  className="w-5 h-5 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+            </label> */}
+            <div className="flex gap-1">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
+                  <svg
+                    className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                    aria-hidden="true"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  id="table-search"
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-64 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder={`Search by ${searchoption}`}
+                />
               </div>
-              <input
-                type="text"
-                id="table-search"
-                onChange={(e) => setSearch(e.target.value)}
-                className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Search username"
-              />
+              <select
+                id="countries"
+                className={`bg-gray-50 border  border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block ${searchoption=='username'?'w-[110px]':'w-[105px]'} p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                onChange={(e)=>setSearchOption(e.target.value)}
+              >
+                <option value={"username"} selected>Username</option>
+                <option value={"email"}>email</option>
+              </select>
             </div>
           </div>
           <Suspense fallback={<Loader />}>
-            <Table search={search} />
+            <Table search={search.trim()} searchOption={searchoption} />
           </Suspense>
         </div>
       </div>

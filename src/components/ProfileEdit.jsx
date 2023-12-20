@@ -7,21 +7,24 @@ import { axiosInstance } from "../constants/constants";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setSignupData } from "../redux/actions/signupActions";
+import ImageCrop from "./ImageCrop";
 const ProfileEdit = () => {
   const [open, setOpen] = useState(false);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const params = useParams();
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-//   const [user, setUser] = useState({});
+  //   const [user, setUser] = useState({});
   const [showprofile, showSetProfile] = useState("");
   const [profile, setProfile] = useState();
+  const saveRef=useRef()
   const usernameRef = useRef();
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
+  const [crop,setCrop]=useState(false)
   const emailRef = useRef();
-  const state=useSelector(state=>state.signupdata)
+  const state = useSelector((state) => state.signupdata);
   const validateForm = () => {
     let validate = true;
     if (!username) {
@@ -45,30 +48,34 @@ const ProfileEdit = () => {
   const submitEditForm = (e) => {
     e.preventDefault();
     if (validateForm()) {
-        let formData=new FormData()
-        formData.append('username',username)
-        formData.append('email',email)
-        formData.append('profile',profile)
-        console.log(JSON.stringify(profile))
+      saveRef.current.disabled=true
+      saveRef.current.textContent='Processing..'
+      let formData = new FormData();
+      formData.append("username", username);
+      formData.append("email", email);
+      formData.append("profile", profile);
+      console.log(JSON.stringify(profile));
       axiosInstance
-        .put(`/updateuserprofile/${params.id}`,formData)
+        .put(`/updateuserprofile/${params.id}`, formData)
         .then((response) => {
-            // alert(JSON.stringify(response.data))
-            if(response.data.status){
-                dispatch(setSignupData(response.data.userData))
-                setOpen(false)
-                // location.reload()
-                navigate(`/profile/${params.id}`)
-            }else{
-                alert(response.data.err)
-            }
+          // alert(JSON.stringify(response.data))
+          if (response.data.status) {
+            dispatch(setSignupData(response.data.userData));
+            setOpen(false);
+            // location.reload()
+            navigate(`/profile/${params.id}`);
+          } else {
+            alert(response.data.err);
+          }
         });
+        saveRef.current.disabled=false
+        saveRef.current.textContent='Save'
     }
   };
   useEffect(() => {
     // alert(JSON.stringify(state.signupData));
     // alert(state)
-    console.log(state.signupData,'in profile');
+    console.log(state.signupData, "in profile");
     // axiosInstance.get(`/getuserprofile/${params.id}`).then((response) => {
     //   if (response.data.status) {
     //     setUser({ ...user, ...response.data.userData });
@@ -81,16 +88,19 @@ const ProfileEdit = () => {
     setUsername(state.signupData.username);
     setEmail(state.signupData.email);
     showSetProfile(state.signupData.profileImage);
-
-    
-
   }, [state.signupData]);
   return (
     <div>
+     
       <button onClick={onOpenModal} className="w-full">
         Edit address
       </button>
       <Modal open={open} onClose={onCloseModal} center>
+      {/* {crop&&<div className="absolute  w-96 min-h-96 bg-[#cbcbcb] top-9 rounded-md z-20 p-2 border">
+          <div className="w-full h-full">
+            <ImageCrop image={profile} setImage={setProfile} offCrop={setCrop}/>
+          </div>
+        </div>} */}
         <h2 className="text-grey-500 font-semibold">Edit details</h2>
         <form className="w-96 flex flex-col" onSubmit={submitEditForm}>
           <div className="w-full h-24 ">
@@ -98,13 +108,15 @@ const ProfileEdit = () => {
               <input
                 type="file"
                 name=""
+                accept="image/*"
                 id="img1"
                 className="hidden"
                 onChange={(e) => {
                   console.log("changin___________");
                   console.log(profile, " asdfadslkfsfd");
-                  showSetProfile(URL.createObjectURL(e.target.files[0]));
                   setProfile(e.target.files[0]);
+                  showSetProfile(URL.createObjectURL(profile));
+                  setCrop(true)
                 }}
               />
               <label
@@ -158,7 +170,7 @@ const ProfileEdit = () => {
               ></span>
             </div>
             <div className="flex flex-col p-1 mt-2">
-              <button className="w-full p-1 bg-slate-200 text-sm" type="submit">
+              <button className="w-full p-1 bg-slate-200 text-sm" type="submit" ref={saveRef}>
                 Save
               </button>
             </div>

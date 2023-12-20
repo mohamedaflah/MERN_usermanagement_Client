@@ -1,18 +1,30 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react";
 // import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
-import { axiosInstance } from "../constants/constants"
+import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../constants/constants";
 
 export default function Home() {
-  const navigate=useNavigate()
-  // const auth=useSelector(state=>state.userAuth)
-  useEffect(()=>{
-    axiosInstance.get('/checkuserauth').then(res=>{
-      if(!res.data.status){
-        navigate('/login')
+  const navigate = useNavigate();
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axiosInstance.get("/checkuserauth").then((res) => {
+      if (!res.data.status) {
+        navigate("/login");
       }
-    })
-  },[navigate])
+      setLoading(false); // Set loading to false when authentication check is complete
+    });
+  }, [navigate]);
+
+  // Render loading indicator while checking authentication
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen w-full flex flex-col">
       <div className="px-5 py-1">
@@ -25,7 +37,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -35,7 +51,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -45,7 +65,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -55,7 +79,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -65,7 +93,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -75,7 +107,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -85,7 +121,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -95,7 +135,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -105,7 +149,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -115,7 +163,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -125,7 +177,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -135,7 +191,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -145,7 +205,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -155,7 +219,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -165,7 +233,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -175,7 +247,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -185,7 +261,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -195,7 +275,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -205,7 +289,11 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
@@ -215,11 +303,15 @@ export default function Home() {
           </div>
           <div className="p-1 line-clamp-6">
             <p className="text-[12px]">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam asperiores porro incidunt minus earum enim delectus deleniti dolorem eaque reprehenderit corporis repellendus tenetur, pariatur accusamus quos consectetur dicta quod. Delectus praesentium possimus modi qui, blanditiis officia iusto nesciunt ex amet.
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quam
+              asperiores porro incidunt minus earum enim delectus deleniti
+              dolorem eaque reprehenderit corporis repellendus tenetur, pariatur
+              accusamus quos consectetur dicta quod. Delectus praesentium
+              possimus modi qui, blanditiis officia iusto nesciunt ex amet.
             </p>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

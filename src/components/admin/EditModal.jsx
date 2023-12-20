@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import demmyImage from '../../assets/download.png'
 import { axiosInstance } from "../../constants/constants";
@@ -12,6 +12,7 @@ function EditModal({userData}){
     const [showmodal,setShowModal]=useState(false)
     const [showprofile,setShowprofile]=useState("")
     const [profile,setProfile]=useState()
+    const editButtonRef=useRef()
     const dispatch=useDispatch()
     useEffect(()=>{
       // eslint-disable-next-line react/prop-types
@@ -28,6 +29,8 @@ function EditModal({userData}){
   
     const handleSubmit = (e) => {
       e.preventDefault();
+      editButtonRef.current.disabled=true
+      editButtonRef.current.textContent='Processing...'
       let formData=new FormData()
       formData.append('email',email)
       formData.append('username',username)
@@ -40,6 +43,8 @@ function EditModal({userData}){
           alert(result.data.err)
         }
       })
+      editButtonRef.current.disabled=false
+      editButtonRef.current.textContent='Edit user'
     };
   
     const closeModal = () => {
@@ -116,6 +121,7 @@ function EditModal({userData}){
                     </label>
                     <input
                       type="file"
+                      accept="image/*"
                       onChange={(e)=>{
                         setProfile(e.target.files[0])
                         setShowprofile(URL.createObjectURL(e.target.files[0]))
@@ -165,6 +171,7 @@ function EditModal({userData}){
                   </div>
                   <button
                     type="submit"
+                    ref={editButtonRef}
                     className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
                     Edit user

@@ -2,54 +2,66 @@ import { MdOutlineEmail } from "react-icons/md";
 import { MdLockOutline } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa6";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { MdLockOpen } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { axiosInstance } from "../constants/constants";
+import Swal from "sweetalert2";
 function LoginControlls() {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [showpass, setShowpass] = useState(false);
-  const [email,setEmail]=useState('')
-  const [password,setPassword]=useState('')
-  const loginValidation=()=>{
-    let validate=true
-    if(!email){
-        validate=false
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const submitRef=useRef()
+  const loginValidation = () => {
+    let validate = true;
+    if (!email) {
+      validate = false;
     }
-    if(!password){
-        validate=false
+    if (!password) {
+      validate = false;
     }
-    return validate
-  }
-  const handleLoginSubmition=()=>{
-    console.log('top',loginValidation())
-    if(loginValidation()){
-      console.log('asfdasfd')
+    return validate;
+  };
+  const handleLoginSubmition = () => {
+    console.log("top", loginValidation());
+    if (loginValidation()) {
+      submitRef.current.disabled=true
+      submitRef.current.textContent='Processing...'
       // alert('all is correct')
-      axiosInstance.post('/login',{
-        email,password
-      }).then(response=>{
-        if(response.data.status){
-          navigate('/')
-        }
-        if(response.data.err){
-          alert(response.data.err)
-          console.log(response.data.err);
-        }
-      })
-    }else{
-      console.log('asfdasfd')
+      axiosInstance
+        .post("/login", {
+          email,
+          password,
+        })
+        .then((response) => {
+          if (response.data.status) {
+            navigate("/");
+          }
+          if (response.data.err) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: response.data.err,
+              footer: '<a href="#">Why do I have this issue?</a>'
+            });
+          }
+        });
+    } else {
+      console.log("asfdasfd");
       // alert('wrong')
     }
-  }
-  const handleEmailSetting=(e)=>{
+    submitRef.current.disabled=false
+    submitRef.current.textContent='submit'
+  };
+  const handleEmailSetting = (e) => {
     // if(e.target.value!==''){
-      setEmail(e.target.value)
+    setEmail(e.target.value);
     // }
-  }
-  const handlePasswordSetting=(e)=>{
-    setPassword(e.target.value)
-  }
+  };
+  const handlePasswordSetting = (e) => {
+    setPassword(e.target.value);
+  };
   return (
     <>
       <div className="px-5 mt-2">
@@ -112,11 +124,18 @@ function LoginControlls() {
               transition: " all 0.3s cubic-bezier(.25,.8,.25,1)",
             }}
             onClick={handleLoginSubmition}
+            ref={submitRef}
           >
             submit
           </button>
           <div className="flex justify-end p-1">
-            <Link className="underline cursor-pointer" to={'/signup'} replace={true}>signup</Link>
+            <Link
+              className="underline cursor-pointer"
+              to={"/signup"}
+              replace={true}
+            >
+              signup
+            </Link>
           </div>
         </div>
       </div>
