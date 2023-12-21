@@ -117,7 +117,7 @@ function SignupControlls() {
   return (
     <>
       <div className="flex justify-center relative">
-        {crop&&<div className="absolute w-96 min-h-96 bg-[#cbcbcb] top-9 rounded-md z-20 p-2 border">
+        {crop&&<div className="absolute w-96 min-h-96 bg-[#cbcbcb] top-9 rounded-md z-20 p-2 border shadow-md">
           <div className="w-full h-full">
             <ImageCrop image={profile} setImage={setProfile} offCrop={setCrop}/>
           </div>
@@ -137,8 +137,8 @@ function SignupControlls() {
             <img
               src={!profile ? ProfileImage : URL.createObjectURL(profile)}
               alt=""
-              className="h-full w-full"
-              style={{ objectFit: "cover" }}
+              className="h-full w-full object-contain"
+              
             />
           </div>
           <div className="flex justify-between mt-1 text-2xl cursor-pointer">
